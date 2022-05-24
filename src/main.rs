@@ -32,16 +32,19 @@ struct MyData {
 }
 impl MyData {
     pub fn new_loaded() -> Self {
-        let filesSet = read_dir("./files")
+        let mut filesSet: HashSet<String> = read_dir("./files")
             .unwrap()
             .into_iter()
             .map(|path| path.unwrap().file_name().to_str().unwrap().to_string())
             .collect();
-        let imagesSet = read_dir("./imgs")
+        let mut imagesSet: HashSet<String> = read_dir("./imgs")
             .unwrap()
             .into_iter()
             .map(|path| path.unwrap().file_name().to_str().unwrap().to_string())
             .collect();
+
+        imagesSet.remove(".keep");
+        filesSet.remove(".keep");
 
         Self {
             filesSet,
@@ -145,6 +148,7 @@ async fn upload_img(
         .open(format!("./imgs/{}", filename))
     {
         payload.next().await;
+
         if let Some(item) = payload.next().await {
             let mut field = item.unwrap();
 
