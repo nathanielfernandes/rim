@@ -105,15 +105,17 @@ async fn rename_img(
 
     let mut my_data = data.lock().unwrap();
     if my_data.imagesSet.contains(&*old_filename) {
-        if !my_data.imagesSet.contains(&*new_filename) {
-            if let Ok(_) = rename(
-                format!("./imgs/{}", old_filename),
-                format!("./imgs/{}", new_filename),
-            ) {
-                my_data.imagesSet.remove(&old_filename);
-                my_data.imagesSet.insert(new_filename);
-                return HttpResponse::build(StatusCode::OK).finish();
-            }
+        if my_data.imagesSet.contains(&*new_filename) {
+            return HttpResponse::build(StatusCode::CONFLICT).finish();
+        }
+
+        if let Ok(_) = rename(
+            format!("./imgs/{}", old_filename),
+            format!("./imgs/{}", new_filename),
+        ) {
+            my_data.imagesSet.remove(&old_filename);
+            my_data.imagesSet.insert(new_filename);
+            return HttpResponse::build(StatusCode::OK).finish();
         }
     }
 
