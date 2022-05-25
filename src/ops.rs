@@ -3,10 +3,10 @@ use serde::Deserialize;
 
 #[derive(Deserialize)]
 pub struct Ops {
-    fliph: Option<bool>,
-    flipv: Option<bool>,
-    scale: Option<f32>,
-    blur: Option<f32>,
+    pub fliph: Option<bool>,
+    pub flipv: Option<bool>,
+    pub scale: Option<f32>,
+    pub blur: Option<f32>,
 }
 
 impl Ops {
